@@ -28,6 +28,8 @@ public class Application implements IApplication {
     * where the Java application is invoked.
     */
    public static String WORKSPACE_DIRECTORY = "./workspace/quotes";
+   
+   private static int quoteId = 0;
 
    private static final Logger LOG = Logger.getLogger(Application.class.getName());
 
@@ -91,6 +93,8 @@ public class Application implements IApplication {
           * one method provided by this class, which is responsible for storing the content of the
           * quote in a text file (and for generating the directories based on the tags).
           */
+         storeQuote(quote, "quote-" + ++quoteId + ".utf8");
+         
          LOG.info(quote.getSource());
          for (String tag : quote.getTags()) {
             LOG.info("> " + tag);
@@ -125,7 +129,35 @@ public class Application implements IApplication {
     * @throws IOException
     */
    void storeQuote(Quote quote, String filename) throws IOException {
-      throw new UnsupportedOperationException("The student has not implemented this method yet.");
+      String[] tags = quote.getTags();
+      String path = "/";
+      
+      File myFile;
+      Writer writer;
+      
+      for(String tag : tags){
+         path += tag + "/";
+      }
+            
+      myFile = new File(WORKSPACE_DIRECTORY + path);
+      myFile.mkdirs();
+      
+      path += filename;
+      myFile = new File(WORKSPACE_DIRECTORY + path);
+      
+      try{
+         myFile.createNewFile();
+      }catch(IOException e){
+         System.out.println("Impossible de créer le fichier.");
+      }
+      
+      writer = new OutputStreamWriter(new FileOutputStream(myFile), "UTF-8");
+      try{
+         writer.append(quote.getQuote());
+      }finally{
+         writer.close();
+      }
+      //throw new UnsupportedOperationException("The student has not implemented this method yet.");
    }
 
    /**
