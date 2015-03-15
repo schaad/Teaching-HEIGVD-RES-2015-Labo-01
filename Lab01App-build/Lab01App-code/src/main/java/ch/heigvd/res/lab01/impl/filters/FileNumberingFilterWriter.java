@@ -63,7 +63,10 @@ public class FileNumberingFilterWriter extends FilterWriter {
   public void write(int c) throws IOException {
      String tmpStr = "";
      
-     if(firstLine){
+     // Cette condition n'est pas optimale car en cas de 2 '\n' consécutifs, 
+     // la numérotation ne se ferait pas, néanmoins par manque de temps je ne 
+     // l'ai pas améliorée
+     if(firstLine && c != '\n'){
         tmpStr = ++noLine + "\t";
         firstLine = false;
      }
@@ -71,7 +74,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
      out.write(tmpStr);
      out.write(c);
      
-     if(c == '\n'){
+     if(c == '\n' || c == '\r'){
         firstLine = true;
      }
      
