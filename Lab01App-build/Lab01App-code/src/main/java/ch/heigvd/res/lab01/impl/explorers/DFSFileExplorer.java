@@ -29,7 +29,11 @@ public class DFSFileExplorer implements IFileExplorer {
          for (File f : tabFile) {
             if(f.isFile()){
                visitor.visit(f);
-            } else {
+            }
+         }
+         
+         for (File f : tabFile) {
+            if(!f.isFile()){
                explore(f, visitor);
             }
          }
